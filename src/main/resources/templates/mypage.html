@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        function menu() {
+            var x = document.getElementById('navbar');
+            x.classList.toggle('show-menu');
+        }
+        const SUPABASE_URL = "https://zpluamwdkdcjtamnqyxz.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwbHVhbXdka2RjanRhbW5xeXh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyODkxOTcsImV4cCI6MjEwMTg2NTE5N30.-bm5cxlnIbKTK4eY6IAu9EL92ww-RQany_f5I_kU3o0";
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const loggedInUser = localStorage.getItem('loggedInUsername');
+
+        if(loggedInUser){
+            location.href = "/mypage-iflog";
+        }
+
+        async function handleLogin() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+
+            if (!username) {
+                alert("아이디를 입력해 주세요.");
+                return;
+            } else if (!password) {
+                alert("비밀번호를 입력해 주세요.");
+                return;
+            }
+
+            const {data,error} = await supabaseClient.from('users').select('*').eq('username',username).eq('password',password).maybeSingle();
+
+            if(error){
+                console.error("로그인 오류.");
+                alert("로그인 중 문제가 발생했습니다. 다시 로그인 해 주십시오.");
+                return;
+            }
+
+            if(!data){
+                alert("! 아이디 또는 비밀번호가 일치하지 않습니다.");
+                return;
+            }
+
+            alert("로그인에 성공하였습니다.")
+            localStorage.setItem('loggedInUsername', data.username);
+            document.cookie = "memberId=" + encodeURIComponent(data.username) + "; path=/";
+            location.href = "/mypage-iflog";
+        }
+    </script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            background-color: white;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 300px) {
+            .menu {
+                visibility: hidden;
+            }
+        }
+
+        .block {
+            display: inline-block;
+        }
+
+        .blank {
+            height: 100px;
+        }
+
+        header {
+            position: fixed;
+            width: 100%;
+            box-shadow: 3px 3px 10px rgba(150, 150, 150, 0.51);
+            left: 0;
+            top: 0;
+            z-index: 10;
+        }
+
+        .head {
+            display: flex;
+            justify-content: space-between;
+            height: 70px;
+            line-height: 30px;
+            background-color: white;
+        }
+
+        .logo {
+            margin: 20px 0 0 5%;
+            height: 30px;
+            width: 100px;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .ham {
+            cursor: pointer;
+            margin: 20px 30px 0 0;
+            height: 30px;
+            width: 30px;
+            background-color: rgb(140, 140, 140);
+        }
+
+        .menu {
+            display: flex;
+            justify-content: space-around;
+            background-color: white;
+            height: 30px;
+            line-height: 20px;
+        }
+
+        .menu-item {
+            display: block;
+            width: 100px;
+            text-align: center;
+            color: black;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .navbar {
+            display: none;
+            position: fixed;
+            right: 20px;
+            top: 60px;
+        }
+
+        .navbar.show-menu {
+            display: inherit;
+            position: fixed;
+            right: 20px;
+            top: 60px;
+        }
+
+        .nav-item {
+            display: block;
+            width: 100px;
+            height: 30px;
+            text-align: center;
+            color: black;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 30px;
+            background-color: white;
+            border-style: solid;
+            border-width: 30px;
+            border-color: rgb(173, 173, 173);
+        }
+
+        .login-back {
+            display: block;
+            margin: 40px auto;
+            padding: 10px;
+            width: 200px;
+            height: 150px;
+            background-color: rgb(255, 255, 255);
+            box-shadow: 0px 3px 9px rgba(150, 150, 150, 0.51);
+        }
+        .login {
+            display: flex;
+            justify-content: center;
+            font-size: 20px;
+            margin: 0 0 10px 0;
+        }
+        .type-box {
+            display: block
+        }
+        .id-box {
+            display: flex;
+            justify-content: center;
+            margin: 0 0 5px 0;
+        }
+
+        .password-box {
+            display: flex;
+            justify-content: center;
+            margin: 0 0 10px 0;
+        }
+
+        .button-box {
+            display: flex;
+            justify-content: center;
+        }
+
+        input[type=text]{
+            border-radius: 0;
+            border-width: 0px;
+            padding: 5px;
+            width: 165px;
+            background-color: rgb(240, 240, 240);
+        }
+
+        input[type=password] {
+            border-radius: 0;
+            border-width: 0px;
+            width: 165px;
+            padding: 5px;
+            background-color: rgb(240, 240, 240);
+        }
+
+        .register-button {
+            border-radius: 0;
+            border-width: 0px;
+            width: 85px;
+            height: 30px;
+            background-color: rgb(189, 219, 253);
+            font-size: 15px;
+            text-decoration: none;
+            text-align: center;
+            line-height: 30px;
+            color: black;
+            cursor: pointer;
+        }
+
+        .login-button {
+            border-radius: 0;
+            border-width: 0;
+            width: 85px;
+            height: 30px;
+            background-color: rgb(115, 180, 255);
+            font-size: 15px;
+            color: white;
+            text-align: center;
+            line-height: 30px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .button-blank {
+            width: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="head">
+            <div class="logo block">
+                Gongmoa
+            </div>
+            <div class="ham block" onclick="menu()">
+            </div>
+        </div>
+        <div class="menu">
+            <a href="/list" class="menu-item">글 목록</a>
+            <a href="/post" class="menu-item">글쓰기</a>
+            <a href="/mypage" class="menu-item">마이페이지</a>
+        </div>
+        <div class="navbar" id="navbar">
+            <a href="/list" class="nav-item">글 목록</a>
+            <a href="/post" class="nav-item">글쓰기</a>
+            <a href="/mypage" class="nav-item">마이페이지</a>
+        </div>
+    </header>
+    <div class="blank"></div>
+    <div class="login-back">
+        <div class="login block">
+            로그인
+        </div>
+        <div class="type-box">
+            <div class="id-box">
+                <input type="text" name="id-box" id="login-username" placeholder="아이디">
+            </div>
+            <div class="password-box">
+                <input type="password" name="password-box" id="login-password" placeholder="비밀번호">
+            </div>
+        </div>
+        <div class="button-box">
+            <a href="/mypage-register.html" class="register-button">회원가입</a>
+            <div class="button-blank"></div>
+            <button type="button" class="login-button" onclick="handleLogin()" th:href="@{/mypage-iflog}">로그인</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

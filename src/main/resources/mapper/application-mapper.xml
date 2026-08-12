@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Application">
+    <insert id="apply" parameterType="application" useGeneratedKeys="true" keyProperty="id">
+        insert into application_table(memberId, boardId, applicantName, univName, department, univEmail, info)
+        values(#{memberId}, #{boardId}, #{applicantName}, #{univName}, #{department}, #{univEmail}, #{info})
+    </insert>
+    <select id="findByBoardId" parameterType="application" resultType="application">
+        select id, memberId, boardId
+        from application_table where boardId=#{boardId}
+    </select>
+    <select id="findByBoardIdAndMemberId" parameterType="map" resultType="application">
+        SELECT * FROM application_table
+        WHERE boardId = #{boardId} AND memberId = #{memberId}
+    </select>
+    <select id="isApplied" parameterType="application" resultType="int">
+        select count(*) from application_table where boardId=#{boardId} and memberId=#{memberId}
+    </select>
+    <select id="findApplicants" parameterType="String" resultType="application">
+        select b.boardTitle, a.applicantName, a.univName, a.department, a.univEmail, a.info
+        from application_table a
+        join board_table b on b.id = a.boardId
+        where b.boardWriter = #{boardWriter}
+    </select>
+    <delete id="cancel" parameterType="Long">
+        delete from application_table
+        where id=#{id}
+    </delete>
+</mapper>
