@@ -4,9 +4,14 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/gongmoa_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: gongmoa_user
-    password: 1234
+    url: jdbc:mysql://gateway01.ap-northeast-1.prod.aws.tidbcloud.com:4000/gongmoa_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&useSSL=true&enabledTLSProtocols=TLSv1.2,TLSv1.3
+    username: 88Mk5SmsPZKcgsv.root
+    password: BxVdQp8elmgCRS1U
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
