@@ -24,35 +24,40 @@ public class BoardService {
         return boardRepository.findById(id);
     }
 
-    public void edit(BoardDTO boardDTO) throws IOException{
+    public void edit(BoardDTO boardDTO) throws IOException {
         boardRepository.edit(boardDTO);
 
-        MultipartFile boardFile=boardDTO.getBoardFile();
+        MultipartFile boardFile = boardDTO.getBoardFile();
 
-        if(boardFile!=null && !boardFile.isEmpty()){
-            BoardFileDTO oldFile=boardRepository.findFile(boardDTO.getId());
-            if(oldFile!=null){
-                File file=new File("D:/board_tistory/springboot-board/springboot-board/src/main/resources/upload_files/"+oldFile.getStoredFileName());
-                if(file.exists()){
+        if (boardFile != null && !boardFile.isEmpty()) {
+            String saveDir = "/tmp/upload_files/";
+            File dir = new File(saveDir);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            BoardFileDTO oldFile = boardRepository.findFile(boardDTO.getId());
+            if (oldFile != null) {
+                File file = new File(saveDir + oldFile.getStoredFileName());
+                if (file.exists()) {
                     file.delete();
                 }
                 boardRepository.deleteFile(boardDTO.getId());
             }
 
             String originalFilename = boardFile.getOriginalFilename();
-            String storedFileName = System.currentTimeMillis()+"_"+originalFilename;
+            String storedFileName = System.currentTimeMillis() + "_" + originalFilename;
 
             BoardFileDTO boardFileDTO = new BoardFileDTO();
             boardFileDTO.setOriginalFileName(originalFilename);
             boardFileDTO.setStoredFileName(storedFileName);
             boardFileDTO.setBoardId(boardDTO.getId());
 
-            String savePath = "D:/board_tistory/springboot-board/springboot-board/src/main/resources/upload_files/"+storedFileName;
+            String savePath = saveDir + storedFileName;
             boardFile.transferTo(new File(savePath));
             boardRepository.saveFile(boardFileDTO);
         }
     }
-
     public void post(BoardDTO boardDTO) throws IOException {
         MultipartFile boardFile=boardDTO.getBoardFile();
 
@@ -71,7 +76,13 @@ public class BoardService {
             boardFileDTO.setStoredFileName(storedFileName);
             boardFileDTO.setBoardId(savedBoard.getId());
 
-            String savePath = "D:/board_tistory/springboot-board/springboot-board/src/main/resources/upload_files/"+storedFileName;
+            String saveDir = "/tmp/upload_files/";
+            File dir = new File(saveDir);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            String savePath = saveDir + storedFileName;
             boardFile.transferTo(new File(savePath));
             boardRepository.saveFile(boardFileDTO);
         }
