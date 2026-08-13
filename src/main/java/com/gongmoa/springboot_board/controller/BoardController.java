@@ -42,7 +42,8 @@ public class BoardController {
     }
 
     @GetMapping("/{id:[0-9]+}")
-    public String findById(@PathVariable("id") Long id, Model model, @CookieValue(value = "memberId", required = false) String memberId) {
+    public String findById(@PathVariable("id") Long id, Model model,
+                           @CookieValue(value = "memberId", required = false) String memberId) {
         BoardDTO boardDTO = boardService.findById(id);
         model.addAttribute("board", boardDTO);
 
@@ -72,10 +73,8 @@ public class BoardController {
     }
 
     @PostMapping("/edit/{id:[0-9]+}")
-    public String edit(BoardDTO boardDTO, Model model) throws IOException{
+    public String edit(BoardDTO boardDTO) throws IOException{
         boardService.edit(boardDTO);
-        BoardDTO dto = boardService.findById(boardDTO.getId());
-        model.addAttribute("board", dto);
         return "redirect:/list";
     }
     @GetMapping("/delete/{id:[0-9]+}")
