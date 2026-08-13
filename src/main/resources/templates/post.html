@@ -332,7 +332,7 @@
                                 imgPreview.setAttribute('src',objectURL);
                                 imgPreview.style.display='block';
                                 imageContainer.classList.add('has-image');
-                                imgPreview.onoload=()=>{
+                                imgPreview.onload=()=>{
                                     URL.revokeObjectURL(objectURL);
                                 };
                             } else{
