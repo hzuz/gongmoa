@@ -9,7 +9,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     private String resourcePath = "/upload/**";
 
-    private String savePath = "file:///tmp/upload_files/";
+    private String savePath = "file:/tmp/upload_files/";
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(resourcePath)
