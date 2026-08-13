@@ -267,7 +267,8 @@
 
             const username = localStorage.getItem('loggedInUsername');
 
-            const { data, error } = await supabaseClient.from('users').select('username, name, school_name, major, email, detail_info').eq('username', username).single();
+            const { data, error } = await supabaseClient.from('users')
+                .select('username, name, school_name, major, email, detail_info').eq('username', username).single();
 
             if (error) {
                 console.log(error);
@@ -366,8 +367,10 @@
             <input type="hidden" id="univEmail" name="univEmail">
             <input type="hidden" id="info" name="info">
             <div class="apply-box">
-                <button type="submit" class="cancelBtn" th:if="${isApplied and board.dday>0}" th:formaction="@{/cancel/{id}(id=${applicationDTO.id})}">신청취소</button>
-                <button type="button" class="applyBtn" th:if="${!isApplied and board.dday>0}" onclick="apply()">신청하기</button>
+                <button type="submit" class="cancelBtn" th:if="${isApplied and board.dday>0}"
+                        th:formaction="@{/cancel/{id}(id=${applicationDTO.id})}">신청취소</button>
+                <button type="button" class="applyBtn" th:if="${!isApplied and board.dday>0}"
+                        onclick="apply()">신청하기</button>
             </div>
         </form>
     </div>

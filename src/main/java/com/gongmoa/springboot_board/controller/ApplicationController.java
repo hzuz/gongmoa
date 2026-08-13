@@ -15,19 +15,10 @@ public class ApplicationController {
     private final ApplicationService applicationService;
 
     @PostMapping("/apply/{boardId:[0-9]+}")
-    public String apply(@PathVariable Long boardId, @RequestParam String memberId, @RequestParam String applicantName,
-                        @RequestParam String univName,@RequestParam String department,@RequestParam String univEmail,@RequestParam String info){
-        ApplicationDTO applicationDTO=new ApplicationDTO();
+    public String apply(@PathVariable Long boardId, @ModelAttribute ApplicationDTO applicationDTO) {
         applicationDTO.setBoardId(boardId);
-        applicationDTO.setMemberId(memberId);
-        applicationDTO.setApplicantName(applicantName);
-        applicationDTO.setUnivName(univName);
-        applicationDTO.setDepartment(department);
-        applicationDTO.setUnivEmail(univEmail);
-        applicationDTO.setInfo(info);
-
         applicationService.apply(applicationDTO);
-        return "redirect:/"+boardId;
+        return "redirect:/" + boardId;
     }
 
     @GetMapping("/mypage")
