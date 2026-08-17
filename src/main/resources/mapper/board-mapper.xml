@@ -11,7 +11,8 @@
         from board_table order by id desc
     </select>
     <select id="findById" parameterType="Long" resultType="board">
-        select id, boardTitle, boardPass, boardContents, deadline, fileAttached, datediff(deadline, curdate()) as dday, univName, department, info
+        select id, boardTitle, boardPass, boardContents, deadline, fileAttached,
+        datediff(deadline, curdate()) as dday, univName, department, info
         from board_table where id=#{id}
     </select>
     <update id="edit" parameterType="board">

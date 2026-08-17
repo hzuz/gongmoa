@@ -28,14 +28,12 @@ public class BoardService {
         boardRepository.edit(boardDTO);
 
         MultipartFile boardFile = boardDTO.getBoardFile();
-
         if (boardFile != null && !boardFile.isEmpty()) {
             String saveDir = "/tmp/upload_files/";
             File dir = new File(saveDir);
             if (!dir.exists()) {
                 dir.mkdirs();
             }
-
             BoardFileDTO oldFile = boardRepository.findFile(boardDTO.getId());
             if (oldFile != null) {
                 File file = new File(saveDir + oldFile.getStoredFileName());
@@ -44,7 +42,6 @@ public class BoardService {
                 }
                 boardRepository.deleteFile(boardDTO.getId());
             }
-
             String originalFilename = boardFile.getOriginalFilename();
             String storedFileName = System.currentTimeMillis() + "_" + originalFilename;
 
